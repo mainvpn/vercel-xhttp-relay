@@ -4,11 +4,13 @@
 
 export const config = { runtime: "edge" };
 
+const DEFAULT_TARGET_BASE = "http://157.173.100.12:2020";
+
 const TARGET_BASE = (
   process.env.TARGET_DOMAIN ||
   process.env.TARGET_URL ||
   process.env.UPSTREAM_URL ||
-  ""
+  DEFAULT_TARGET_BASE
 ).replace(/\/$/, "");
 
 // Hop-by-hop and platform headers that must NEVER be forwarded upstream.
