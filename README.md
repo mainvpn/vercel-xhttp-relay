@@ -22,6 +22,8 @@
 
 It uses Vercel's globally distributed edge network — and its `vercel.com` / `*.vercel.app` SNI — as a domain front for your real Xray endpoint. This is especially useful in regions where the backend host is blocked but Vercel is reachable.
 
+When you open the deployment in a browser, it now renders a built-in status/setup UI instead of a raw error. Actual relay traffic still passes through the same Edge function.
+
 > ⚠️ **XHTTP transport only.** This relay is purpose-built for Xray's `xhttp` transport. It will **not** work with `WebSocket`, `gRPC`, `TCP`, `mKCP`, `QUIC`, or any other V2Ray/Xray transport — the Edge runtime doesn't support WebSocket upgrade or arbitrary TCP, and the other transports rely on protocol features Edge `fetch` doesn't expose.
 
 ---
@@ -94,6 +96,7 @@ Notes:
 - Use `https://` if your backend terminates TLS, `http://` if plain.
 - Include a non-default port if needed.
 - Trailing slashes are stripped automatically.
+- Compatibility aliases: the runtime also accepts `TARGET_URL` and `UPSTREAM_URL`, but `TARGET_DOMAIN` is the primary documented variable.
 
 ### 3. Deploy
 
@@ -111,6 +114,12 @@ vercel --prod
 ```
 
 After deployment Vercel gives you a URL like `your-app.vercel.app`.
+
+### 4. Verify deployment
+
+- Open your deployment URL in a browser. You should see the **MainVPN Relay Status** page.
+- Call `/__health` on the same domain to get JSON status.
+- A healthy deployment returns `200` from `/__health`; an unconfigured deployment returns `503` with `configured: false`.
 
 ---
 
